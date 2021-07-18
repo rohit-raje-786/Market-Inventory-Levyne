@@ -12,19 +12,26 @@ var con = mysql.createConnection({
 const query = util.promisify(con.query).bind(con);
 
 app.set("view engine", "ejs");
-const products = [
-  { name: "Chockalate Cake", price: 34 },
-  { name: "Cadbury", price: 25 },
-  { name: "Milkshake", price: 56 },
-];
+
 app.get("/", (req, res) => {
   const getProducts = async () => {
     try {
       let rows = await query("select *from products");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
+      const count = {};
+      let items = [];
+      for (let i = 0; i < rows.length; i++) {
+        items.push(rows[i].name);
+      }
+      items.forEach((e) => (count[e] ? count[e]++ : (count[e] = 1)));
+
+      const freq = Object.entries(count);
+
+      console.log(freq);
       res.render("pages/Home", {
         logo: "Levyne",
         products: rows,
+        freq: freq,
       });
       console.log(rows);
     } catch (e) {
@@ -96,6 +103,18 @@ app.get("/facebook", (req, res) => {
     }
   };
   getProducts();
+});
+
+app.get("/delete/:id", async (req, res, next) => {
+  try {
+    let rows = await query(
+      `DELETE FROM products Where Productid=${req.params.id}`
+    );
+    console.log(rows);
+    res.redirect("/");
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 app.listen(5000, () => console.log("succesfully connected to port 5000"));

@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <%- include('../partials/head'); %>
-</head>
-<body class="container">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body class="container">
+    <header><%- include('../partials/header'); %></header>
 
-<header>
-  <%- include('../partials/header'); %>
-</header>
+    <main>
+      <div class="jumbotron">
+        <h1>Total Items:<%= products.length %></h1>
+        <p>
+          <% freq.forEach(function(item){ %>
+            <p> <%= item[0]%>:<%= item[1]%></p>
+            
+          <%}) %>
+        </p>
+      </div>
+    </main>
 
-<main>
-  <div class="jumbotron">
-    <h1>Total Items:<%= products.length %></h1>
-    <p>Welcome to templating using EJS</p>
-  </div>
-</main>
-
-<footer>
-  <%- include('../partials/footer'); %>
-</footer>
-
-</body>
+    <footer><%- include('../partials/footer'); %></footer>
+  </body>
 </html>
