@@ -10,10 +10,6 @@ var con = mysql.createConnection({
   database: "products",
 });
 const query = util.promisify(con.query).bind(con);
-let data = [];
-
-
-console.log(data);
 
 app.set("view engine", "ejs");
 const products = [
@@ -26,43 +22,80 @@ app.get("/", (req, res) => {
     try {
       let rows = await query("select *from products");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
-      for (let i = 0; i < rows.length; i++) {
-        data.push(rows[i]);
-      }
+      res.render("pages/Home", {
+        logo: "Levyne",
+        products: rows,
+      });
       console.log(rows);
-    } finally {
-      con.end();
+    } catch (e) {
+      console.log(e);
     }
   };
   getProducts();
-  res.render("pages/Home", {
-    logo: "Levyne",
-    products: products,
-  });
 });
 app.get("/amazon", (req, res) => {
-  res.render("pages/Amazon", {
-    logo: "Amazon",
-    products: products,
-  });
+  const getProducts = async () => {
+    try {
+      let rows = await query("select *from products");
+      rows = Object.values(JSON.parse(JSON.stringify(rows)));
+      res.render("pages/Amazon", {
+        logo: "Amazon",
+        products: rows,
+      });
+      console.log(rows);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getProducts();
 });
 app.get("/swiggy", (req, res) => {
-  res.render("pages/Swiggy", {
-    logo: "Swiggy",
-    products: products,
-  });
+  const getProducts = async () => {
+    try {
+      let rows = await query("select *from products");
+      rows = Object.values(JSON.parse(JSON.stringify(rows)));
+      res.render("pages/Swiggy", {
+        logo: "Swiggy",
+        products: rows,
+      });
+      console.log(rows);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getProducts();
 });
 app.get("/zomato", (req, res) => {
-  res.render("pages/Zomato", {
-    logo: "Zomato",
-    products: products,
-  });
+  const getProducts = async () => {
+    try {
+      let rows = await query("select *from products");
+      rows = Object.values(JSON.parse(JSON.stringify(rows)));
+      res.render("pages/Zomato", {
+        logo: "Zomato",
+        products: rows,
+      });
+      console.log(rows);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getProducts();
 });
 app.get("/facebook", (req, res) => {
-  res.render("pages/Facebook", {
-    logo: "Facebook",
-    products: products,
-  });
+  const getProducts = async () => {
+    try {
+      let rows = await query("select *from products");
+      rows = Object.values(JSON.parse(JSON.stringify(rows)));
+      res.render("pages/Facebook", {
+        logo: "Facebook",
+        products: rows,
+      });
+      console.log(rows);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getProducts();
 });
 
 app.listen(5000, () => console.log("succesfully connected to port 5000"));
