@@ -16,7 +16,7 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("select *from products");
+      let rows = await query("SELECT *FROM Product");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       const count = {};
       let items = [];
@@ -43,7 +43,7 @@ app.get("/", (req, res) => {
 app.get("/amazon", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("select *from products");
+      let rows = await query("SELECT *FROM Product");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Amazon", {
         logo: "Amazon",
@@ -59,7 +59,7 @@ app.get("/amazon", (req, res) => {
 app.get("/swiggy", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("select *from products");
+      let rows = await query("SELECT *FROM Product");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Swiggy", {
         logo: "Swiggy",
@@ -75,7 +75,7 @@ app.get("/swiggy", (req, res) => {
 app.get("/zomato", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("select *from products");
+      let rows = await query("SELECT *FROM Product");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Zomato", {
         logo: "Zomato",
@@ -91,7 +91,7 @@ app.get("/zomato", (req, res) => {
 app.get("/facebook", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("select *from products");
+      let rows = await query("SELECT *FROM Product");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Facebook", {
         logo: "Facebook",
@@ -108,7 +108,7 @@ app.get("/facebook", (req, res) => {
 app.get("/delete/:id", async (req, res, next) => {
   try {
     let rows = await query(
-      `DELETE FROM products Where Productid=${req.params.id}`
+      `DELETE FROM Product WHERE ProductID=${req.params.id}`
     );
     console.log(rows);
     res.redirect("/");
@@ -117,4 +117,4 @@ app.get("/delete/:id", async (req, res, next) => {
   }
 });
 
-app.listen(5000, () => console.log("succesfully connected to port 5000"));
+app.listen(5000, () => console.log("successfully connected to port 5000"));
