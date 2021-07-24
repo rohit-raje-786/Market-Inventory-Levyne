@@ -1,22 +1,53 @@
 var express = require("express");
 var app = express();
+var session = require('express-session');
 
 var mysql = require("mysql");
 const util = require("util");
 var con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "products",
+  host: "SG-Levyne-4674-mysql-master.servers.mongodirector.com",
+  user: "sgroot",
+  password: "cdGO2rIs8uP!FYm9",
+  database: "Levyne",
 });
+
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
 const query = util.promisify(con.query).bind(con);
 
 app.set("view engine", "ejs");
 
+//------------ Bodyparser Configuration ------------//
+app.use(express.urlencoded({ extended: false }))
+
+app.get('/auth', (req, res) => {
+  res.render("pages/login", { logo: "Login" });
+})
+
+app.post('/auth', async (req, res) => {
+	var number = req.body.number;
+	if (number) {
+		await query('SELECT * FROM accounts WHERE number = ?', [number], function(error, results) {
+			if (results.length > 0) {
+				req.session.loggedin = true;
+				req.session.number = number;
+				res.redirect('/');
+			} else {
+				res.send('Incorrect Number! Please try again');
+			}			
+		});
+	} else {
+		res.send('Please enter Username and Password!');
+	}
+});
+
 app.get("/", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("SELECT *FROM Product");
+      let rows = await query("select *from FakeCakeProducts");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       const count = {};
       let items = [];
@@ -40,10 +71,11 @@ app.get("/", (req, res) => {
   };
   getProducts();
 });
+
 app.get("/amazon", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("SELECT *FROM Product");
+      let rows = await query("select *from FakeCakeProducts");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Amazon", {
         logo: "Amazon",
@@ -59,7 +91,7 @@ app.get("/amazon", (req, res) => {
 app.get("/swiggy", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("SELECT *FROM Product");
+      let rows = await query("select *from FakeCakeProducts");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Swiggy", {
         logo: "Swiggy",
@@ -75,7 +107,7 @@ app.get("/swiggy", (req, res) => {
 app.get("/zomato", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("SELECT *FROM Product");
+      let rows = await query("select *from FakeCakeProducts");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Zomato", {
         logo: "Zomato",
@@ -91,7 +123,7 @@ app.get("/zomato", (req, res) => {
 app.get("/facebook", (req, res) => {
   const getProducts = async () => {
     try {
-      let rows = await query("SELECT *FROM Product");
+      let rows = await query("select * from FakeCakeProducts");
       rows = Object.values(JSON.parse(JSON.stringify(rows)));
       res.render("pages/Facebook", {
         logo: "Facebook",
@@ -106,15 +138,22 @@ app.get("/facebook", (req, res) => {
 });
 
 app.get("/delete/:id", async (req, res, next) => {
-  try {
-    let rows = await query(
-      `DELETE FROM Product WHERE ProductID=${req.params.id}`
-    );
-    console.log(rows);
-    res.redirect("/");
-  } catch (e) {
-    console.log(e);
+  if(req.session.loggedin){
+    try {
+      let rows = await query(
+        `DELETE FROM FakeCakeProducts Where eancode=${req.params.id}`
+      );
+      console.log(rows);
+      res.redirect("/");
+    } catch (e) {
+      console.log(e);
+    }
+    
   }
+  else {
+    res.send('Please login to buy and checkout!');
+  }
+  
 });
 
-app.listen(5000, () => console.log("successfully connected to port 5000"));
+app.listen(5000, () => console.log("succesfully connected to port 5000"));

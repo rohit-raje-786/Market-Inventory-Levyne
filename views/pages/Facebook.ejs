@@ -7,22 +7,23 @@
     <header><%- include('../partials/header'); %></header>
 
     <main>
-      <div class="justify-content-around p-4"> 
-        <div class="row">
+      <div class="d-flex justify-content-around">
         <% products.forEach(function(product){ %>
-          <div class="col-lg-4 col-lg-offset-4">
-            <div class="card" style="width: 18rem">
+          <div class="container">
+            <div class="card mt-5" style="width: 18rem">
               <img class="card-img-top" src="<%= product.product_image_url %>" alt="Card image cap" />
               <div class="card-body">
-                <h5 class="card-title"><%= product.product %></h5>
-                <p class="card-text">Price: <%= product.sale_price %></p>
-                <a href="/delete/<%= product.ProductID %>" class="btn btn-primary">Buy</a>
+                <h5 class="card-title"><%= product.brand %></h5>
+                <p class="card-text">Price: <%= product.market_price %></p>
+                <a href="/delete/<%= product.eancode %>" class="btn btn-primary">Buy</a>
               </div>
             </div>
-          </div>       
+          </div>
+        
         <% }); %>
       </div>
-      </div>
     </main>
+
+    
   </body>
 </html>
