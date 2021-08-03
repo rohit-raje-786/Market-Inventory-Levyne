@@ -52,7 +52,7 @@ app.get("/", (req, res) => {
       const count = {};
       let items = [];
       for (let i = 0; i < rows.length; i++) {
-        items.push(rows[i].name);
+        items.push(rows[i].brand);
       }
       items.forEach((e) => (count[e] ? count[e]++ : (count[e] = 1)));
 
